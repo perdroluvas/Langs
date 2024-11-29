@@ -33,3 +33,4 @@ quicksort (x:xs) =
         biggerSorted = quicksort [a | a <- xs, a > x]  
     in  smallerSorted ++ [x] ++ biggerSorted 
 
+oiii x = x^2 + x^3
