@@ -3,7 +3,6 @@
 #include <ctype.h>
 
 int count_words(FILE *file) {
-  char c;
     char c;
     int in_word = 0;
     int word_count = 0;
