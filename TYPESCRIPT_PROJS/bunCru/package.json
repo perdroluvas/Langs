@@ -1,0 +1,14 @@
+{
+  "name": "buncru",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "^1.1.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "elysia": "^1.1.26"
+  }
+}
