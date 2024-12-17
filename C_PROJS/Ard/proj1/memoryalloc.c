@@ -9,34 +9,28 @@ struct Node {
 
 // Function prototypes
 // TODO: Complete these function declarations
-struct Node* createNode(/* what parameters do you need? */);
-struct Node* insertNode(/* what parameters do you need? */);
-struct Node* displayList(/* what parameters do you need? */);
-struct Node* freeList(/* what parameters do you need? */);
-struct Node* printArray();
+struct Node* createNode(int value);
+struct Node* insertNode(struct Node* head, int value);
+void displayList(struct Node* head);
+void freeList(struct Node* head);
 
 
 int main() {
-    // TODO: Declare your head pointer
-    // TODO: Initialize your list
-    int array[] = {1, 2, 3, 4, 5};
-    //int* ptr = array;
-    /*
-    printf("Pointer arithmetic demonstration:\n");
-    printf("First element: %d\n", *ptr);        // 1
-    printf("Second element: %d\n", *(ptr + 1)); // 2
-    printf("Third element: %d\n", *(ptr + 2));  // 3
-    printf("After moving pointer forward 2 positions: %d\n", *ptr); // 3
-    */
+    struct Node* head = NULL;
+    head = createNode(8);
+    insertNode(head, 2);
+    displayList(head);
 
-    createNode(6);
-    printArray(6);
+    // Modificar esta linha para mostrar o valor do nó
+    printf("Valor do nó: %d\n", head->data);  // Use -> para acessar o campo data
 
-    // TODO: Add some nodes
+    freeList(head);
 
-    // TODO: Display the list
-
-    // TODO: Free the memory
+    // Este printf pode causar problemas pois 'head' foi liberado
+    // Melhor remover ou modificar para verificar se está nulo
+    if (head == NULL) {
+        printf("Lista está vazia\n");
+    }
 
     return 0;
 }
@@ -53,22 +47,46 @@ struct Node* createNode(int value) {
 }
 
 
-struct Node* printArray(int array[], int size) {
-    printf("Conteúdo da array: ");
-    for (int i = 0; i < size; i++) {
-        printf("%d ", array[i]);
+struct Node* insertNode(struct Node* head, int value) {
+    // Primeiro, criar o novo nó
+    struct Node* newNode = createNode(value);
+
+    if (head == NULL) {
+        // Se a lista está vazia, o novo nó se torna a cabeça
+        return newNode;
     }
-    printf("\n");
+
+    // Se não está vazia, precisamos ir até o último nó
+    struct Node* current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    // Agora current aponta para o último nó
+    current->next = newNode;
+
+    return head;
 }
 
-struct Node* insertNode(){
-    printf("Inseriu node!");
+void displayList(struct Node* head) {
+    struct Node* current = head;
+    printf("Lista: ");
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
 }
 
-struct Node* displayList(){
-    printf("Mostrando a lista");
-}
+void freeList(struct Node* head){
+    if (head == NULL) {
 
-struct Node*freeList(){
-    printf("lista vazia mano!");
+        printf("List is already empy!");
+    }
+    else {
+        printf("Freeing...");
+        free(head);
+        head = NULL;
+        printf("Freed.");
+    }
 }
