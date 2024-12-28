@@ -1,166 +1,111 @@
-import { Elysia } from 'elysia';
+import { serve } from "bun";
+import { User } from './types';
 import { db } from './database/db';
 import { kdb } from './database/kdb';
-import { Members, User } from './types';
+import { Members } from './types';
 
-const app = new Elysia()
-//KPOP PART
-  .post('/members', ({ body }) => {
-    const { name, colorfav, age, animal, band } = body as Members;
+const server = serve({
+  port: 3000,
+  async fetch(req) {
+    const url = new URL(req.url);
+    const method = req.method;
 
-    if (!name || !colorfav || !age || !animal || !band) {
-      return {
-        error: 'All fields are required',
-        status: 400
-      };
-    }
-
-    const newMember = kdb.createIdol({ name, colorfav, age, animal, band });
-    return {
-      member: newMember,
-      status: 201
-    };
-  })
-
-  // Get all members
-  .get('/members', () => {
-    return {
-      members: kdb.findAll(),
-      status: 200
-    };
-  })
-
-  // Find by name
-  .get('/members/name/:name', ({ params }) => {
-    const member = kdb.findByName(params.name);
-
-    if (!member) {
-      return {
-        error: 'Member not found',
-        status: 404
-      };
-    }
-
-    return {
-      member,
-      status: 200
-    };
-  })
-
-  // Find by band
-  .get('/members/band/:band', ({ params }) => {
-    const member = kdb.findByBand(params.band);
-
-    if (!member) {
-      return {
-        error: 'Member not found',
-        status: 404
-      };
-    }
-  })
-//KPOP PART END
-  .post('/users', ({ body }) => {
-      const { name, email, bias, favGroup, fandomName } = body as Omit<User, 'id' | 'createdAt'>;
-
-      // Basic validation
-      if (!name || !email || !bias || !favGroup || !fandomName) {
-        return {
-          error: 'All fields (name, email, bias, favGroup, fandomName) are required',
-          status: 400
-        };
+    // Helper function to parse JSON body
+    async function parseBody() {
+      try {
+        return await req.json();
+      } catch (e) {
+        return null;
       }
-
-      const newUser = db.create({ name, email, bias, favGroup, fandomName });
-      return {
-        user: newUser,
-        status: 201
-      };
-    })
-
-  .put('/users/:id', ({ params, body }) => {
-    const { name, email, bias, favGroup, fandomName } = body as Partial<Omit<User, 'id' | 'createdAt'>>;
-    const updatedUser = db.update(params.id, {
-      name,
-      email,
-      bias,
-      favGroup,
-      fandomName
-    });
-
-    if (!updatedUser) {
-      return {
-        error: 'User not found',
-        status: 404
-      };
     }
 
-    return {
-      user: updatedUser,
-      status: 200
-    };
-  })
-
-
-
-  // Get all users
-  .get('/users', () => {
-    return {
-      users: db.findAll(),
-      status: 200
-    };
-  })
-
-  // Get user by ID
-  .get('/users/:id', ({ params }) => {
-    const user = db.findById(params.id);
-
-    if (!user) {
-      return {
-        error: 'User not found',
-        status: 404
-      };
+    // Helper function to send JSON response
+    function jsonResponse(data: any, status = 200) {
+      return new Response(JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        status,
+      });
     }
 
-    return {
-      user,
-      status: 200
-    };
-  })
-
-  // Update user
-  .put('/users/:id', ({ params, body }) => {
-    const { name, email } = body as Partial<Omit<User, 'id' | 'createdAt'>>;
-    const updatedUser = db.update(params.id, { name, email });
-
-    if (!updatedUser) {
-      return {
-        error: 'User not found',
-        status: 404
-      };
+    // KPOP ROUTES
+    if (url.pathname === '/members' && method === 'POST') {
+      const body = await parseBody() as Members;
+      if (!body?.name || !body?.colorfav || !body?.age || !body?.animal || !body?.band) {
+        return jsonResponse({ error: 'All fields are required' }, 400);
+      }
+      const newMember = kdb.createIdol(body);
+      return jsonResponse({ member: newMember, status: 201 }, 201);
     }
 
-    return {
-      user: updatedUser,
-      status: 200
-    };
-  })
-
-  // Delete user
-  .delete('/users/:id', ({ params }) => {
-    const deleted = db.delete(params.id);
-
-    if (!deleted) {
-      return {
-        error: 'User not found',
-        status: 404
-      };
+    if (url.pathname === '/members' && method === 'GET') {
+      return jsonResponse({ members: kdb.findAll(), status: 200 });
     }
 
-    return {
-      message: 'User deleted successfully',
-      status: 200
-    };
-  })
-  .listen(3000);
+    if (url.pathname.startsWith('/members/name/') && method === 'GET') {
+      const name = url.pathname.split('/members/name/')[1];
+      const member = kdb.findByName(name);
+      if (!member) {
+        return jsonResponse({ error: 'Member not found' }, 404);
+      }
+      return jsonResponse({ member, status: 200 });
+    }
 
-console.log(`🦊 Server running at ${app.server?.hostname}:${app.server?.port}`);
+    if (url.pathname.startsWith('/members/band/') && method === 'GET') {
+      const band = url.pathname.split('/members/band/')[1];
+      const member = kdb.findByBand(band);
+      if (!member) {
+        return jsonResponse({ error: 'Member not found' }, 404);
+      }
+      return jsonResponse({ member, status: 200 });
+    }
+
+    // USER ROUTES
+    if (url.pathname === '/users' && method === 'POST') {
+      const body = await parseBody();
+      if (!body?.name || !body?.email || !body?.bias || !body?.favGroup || !body?.fandomName) {
+        return jsonResponse({
+          error: 'All fields (name, email, bias, favGroup, fandomName) are required'
+        }, 400);
+      }
+      const newUser = db.create(body);
+      return jsonResponse({ user: newUser, status: 201 }, 201);
+    }
+
+    if (url.pathname === '/users' && method === 'GET') {
+      return jsonResponse({ users: db.findAll(), status: 200 });
+    }
+
+    if (url.pathname.startsWith('/users/') && method === 'GET') {
+      const id = url.pathname.split('/users/')[1];
+      const user = db.findById(id);
+      if (!user) {
+        return jsonResponse({ error: 'User not found' }, 404);
+      }
+      return jsonResponse({ user, status: 200 });
+    }
+
+    if (url.pathname.startsWith('/users/') && method === 'PUT') {
+      const id = url.pathname.split('/users/')[1];
+      const body = await parseBody();
+      const updatedUser = db.update(id, body);
+      if (!updatedUser) {
+        return jsonResponse({ error: 'User not found' }, 404);
+      }
+      return jsonResponse({ user: updatedUser, status: 200 });
+    }
+
+    if (url.pathname.startsWith('/users/') && method === 'DELETE') {
+      const id = url.pathname.split('/users/')[1];
+      const deleted = db.delete(id);
+      if (!deleted) {
+        return jsonResponse({ error: 'User not found' }, 404);
+      }
+      return jsonResponse({ message: 'User deleted successfully', status: 200 });
+    }
+
+    // 404 for unmatched routes
+    return jsonResponse({ error: 'Not Found' }, 404);
+  },
+});
+
+console.log(`🦊 Server running at http://localhost:${server.port}`);

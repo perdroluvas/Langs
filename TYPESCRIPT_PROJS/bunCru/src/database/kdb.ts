@@ -56,8 +56,9 @@ class KDatabase {
   findByName(name: string): Members | undefined {
     return this.members.find(member => member.name === name);
   }
-  findByBand(band: string): Members | undefined {
-    return this.members.find(member => member.band === band);
+  findByBand(band: string): Members[] {
+    // Use filter instead of find to get all members of the band
+    return this.members.filter(member => member.band === band);
   }
 
 }
