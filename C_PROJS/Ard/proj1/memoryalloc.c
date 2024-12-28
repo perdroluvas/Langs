@@ -20,6 +20,8 @@ int main() {
     head = createNode(8);
     insertNode(head, 2);
     displayList(head);
+    insertNode(head, 12);
+
 
     // Modificar esta linha para mostrar o valor do nó
     printf("Valor do nó: %d\n", head->data);  // Use -> para acessar o campo data

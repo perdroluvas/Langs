@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { User } from './types';
+import { Members, User } from '../types';
 
 class InMemoryDatabase {
   private users: User[] = [];
@@ -40,11 +40,18 @@ class InMemoryDatabase {
     this.users = this.users.filter(user => user.id !== id);
     return this.users.length < initialLength;
   }
-  deleteAll(): number {
+
+
+  deleteAll(): number { //learning purposes
     const count = this.users.length;
     this.users = []; // Clear the entire array
     return count;
   }
 }
 
+
+
 export const db = new InMemoryDatabase();
+
+
+
