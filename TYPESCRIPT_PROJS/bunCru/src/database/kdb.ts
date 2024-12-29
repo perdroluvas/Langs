@@ -1,12 +1,40 @@
 import { Members, User } from '../types';
+import { Database } from "bun:sqlite";
 
 class KDatabase {
-
   private members: Members[] = [];
-  private groupLimits: { [key: string]: number } = {
-    'NewJeans': 5,
-    'TVXQ': 2,
-    'BLACKPINK': 4
+    private groupLimits: { [key: string]: number } = {
+      'NewJeans': 5,
+      'TVXQ': 2,
+      'BLACKPINK': 4,
+      'BTS': 7,
+      'TWICE': 9,
+      'SEVENTEEN': 13,
+      'EXO': 9,
+      'Red Velvet': 5,
+      'NCT 127': 10,
+      'NCT Dream': 7,
+      'ITZY': 5,
+      'aespa': 4,
+      'Stray Kids': 8,
+      'ENHYPEN': 7,
+      'LE SSERAFIM': 6,
+      'IVE': 6,
+      'TREASURE': 10,
+      'Tomorrow X Together': 5,
+      'SHINee': 5,
+      'BIGBANG': 4,
+      '2NE1': 4,
+      'Super Junior': 11, // Based on active members
+      'Girls Generation': 8,
+      'Kep1er': 9,
+      'LOONA': 12,
+      'Mamamoo': 4,
+      'MONSTA X': 6,
+      'ASTRO': 5,
+      'GOT7': 7,
+      'WINNER': 4,
+      'VIXX': 6
     // Add other groups as needed
   };
 
