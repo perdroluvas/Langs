@@ -2,17 +2,6 @@
 
 Este repositório é dedicado ao aprendizado contínuo e compartilhado. Aqui você encontrará projetos organizados por linguagem ou tecnologia, cada um refletindo minha jornada de desenvolvimento e curiosidade técnica. A ideia principal é **aprender em público**: documentar, compartilhar e evoluir através do feedback e da colaboração.
 
-## 📂 Estrutura do Repositório  
-
-- **[C_PROJS](./C_PROJS):** 
-- **[GO_PROJS](./GO_PROJS):**   
-- **[HASKELL_PROJS](./HASKELL_PROJS):**   
-- **[PYTHON_PROJS](./PYTHON_PROJS):** 
-- **[RUST_PROJS](./RUST_PROJS):** 
-- **[TYPESCRIPT_PROJS](./TYPESCRIPT_PROJS):**   
-
-## 🚀 Como Contribuir  
-
 1. Explore os diretórios e os projetos.  
 2. Deixe sugestões, críticas ou elogios através de issues ou pull requests.  
 3. Compartilhe seus próprios aprendizados e experiências para colaborar com a comunidade.  
