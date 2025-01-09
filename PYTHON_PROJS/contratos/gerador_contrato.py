@@ -73,7 +73,7 @@ def generate_contract():
 
     elif locador_nome == "Janja":
     # Dados de Elisangela Batista dos Santos (LOCADOR)
-        doc.add_paragraph(f"""Pelo presente instrumento particular de locação, de um lado, ELISSANGELA BATISTA DOS SANTOS, brasileira, divorciada, portador da C.I Nº2518063 e CPF: Nº 352.202.952-68, residente na TRV Vileta n 2501 – Marco- –Belém – PA, denominado LOCADOR, e de outro, o Sr(a). {locatario_nome}, portador da RG Nº {locatario_rg} e CPF Nº {locatario_cpf}, doravante denominado LOCATÁRIO, têm, entre si, justos e contratados, o presente contrato, consoante as cláusulas e condições abaixo:""")
+        doc.add_paragraph(f"""Pelo presente instrumento particular de locação, de um lado, ELISANGELA BATISTA DOS SANTOS, brasileira, divorciada, portador da C.I Nº2518063 e CPF: Nº 352.202.952-68, residente na TRV Vileta n 2501 – Marco- –Belém – PA, denominado LOCADOR, e de outro, o Sr(a). {locatario_nome}, portador da RG Nº {locatario_rg} e CPF Nº {locatario_cpf}, doravante denominado LOCATÁRIO, têm, entre si, justos e contratados, o presente contrato, consoante as cláusulas e condições abaixo:""")
 
     doc.add_paragraph("Constitui objeto do presente Contrato a locação do imóvel localizado no Conjunto Cidade Nova III, We 18, n° 22 Apartamento 3, Bairro do Coqueiro –Ananindeua-PA, CEP: 67130675")
 
@@ -170,7 +170,10 @@ def generate_contract():
     
     doc.add_paragraph("\n\n")
     add_centered_paragraph(doc, "_" * 50)
-    add_centered_paragraph(doc, "ELISANGELA BATISTA DOS SANTOS")
+    if locador_nome == "Janja":
+        add_centered_paragraph(doc, "ELISANGELA BATISTA DOS SANTOS")
+    elif locador_nome == "Sandra":
+        add_centered_paragraph(doc, "ELISSANDRA BATISTA DOS SANTOS")
     add_centered_paragraph(doc, "Locador")
     
     doc.add_paragraph("\n")

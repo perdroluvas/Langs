@@ -1,46 +1,48 @@
-class BankAccount {
-  // Private property to store balance
-  #balance: number;
+class ContaBancaria {
+  // Propriedade privada para armazenar o saldo
+  #saldo: number;
 
-  constructor(initialBalance: number = 0) {
-    // Validate initial balance
-    if (initialBalance < 0) {
-      throw new Error("Initial balance cannot be negative");
+  constructor(saldoInicial: number = 0) {
+    // Validar saldo inicial
+    if (saldoInicial < 0) {
+      throw new Error("O saldo inicial não pode ser negativo");
     }
-    this.#balance = Number(initialBalance.toFixed(2));
+    this.#saldo = Number(saldoInicial.toFixed(2));
   }
 
-  // Getter for balance with formatting
-  get balance(): string {
-    // Format balance as currency
-    return `$${this.#balance.toFixed(2)}`;
+  // Getter para o saldo com formatação
+  get saldo(): string {
+    // Formatar o saldo como moeda
+    return `R$${this.#saldo.toFixed(2)}`;
   }
 
-  // Method to deposit funds
-  deposit(amount: number): void {
-    if (amount <= 0) {
-      throw new Error("Deposit amount must be positive");
+  // Método para depositar fundos
+  depositar(valor: number): void {
+    if (valor <= 0) {
+      throw new Error("O valor do depósito deve ser positivo");
     }
-    this.#balance += Number(amount.toFixed(2));
+    this.#saldo += Number(valor.toFixed(2));
   }
 
-  // Method to withdraw funds
-  withdraw(amount: number): void {
-    if (amount > this.#balance) {
-      throw new Error("Insufficient funds");
+  // Método para sacar fundos
+  sacar(valor: number): void {
+    if (valor > this.#saldo) {
+      throw new Error("Fundos insuficientes");
     }
-    if (amount <= 0) {
-      throw new Error("Withdrawal amount must be positive");
+    if (valor <= 0) {
+      throw new Error("O valor do saque deve ser positivo");
     }
-    this.#balance -= Number(amount.toFixed(2));
+    this.#saldo -= Number(valor.toFixed(2));
   }
 }
 
-// Usage example
-const account = new BankAccount(1000); // Create account with $1000
-console.log(account.balance); // "$1000.00"
-account.deposit(500); // Deposit $500
-console.log(account.balance); // "$1500.00"
-account.withdraw(200); // Withdraw $200
-console.log(account.balance); // "$1300.00"
+// Exemplo de uso
+const conta = new ContaBancaria(1000); // Criar conta com R$1000
+console.log(conta.saldo); // "R$1000.00"
+conta.depositar(500); // Depositar R$500
+console.log(conta.saldo); // "R$1500.00"
+conta.sacar(200); // Sacar R$200
+console.log(conta.saldo); // "R$1300.00"
+conta.depositar(-500);
+console.log(conta.saldo);
 
